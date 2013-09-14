@@ -9,6 +9,117 @@ using MonoTouch.AVFoundation;
 
 namespace GPUImage
 {
+	#region GPUImageMovieWriter
+	[Model, BaseType (typeof (NSObject))]
+	public partial interface GPUImageMovieWriterDelegate
+	{
+		// - (void)movieRecordingCompleted;
+		[Export ("movieRecordingCompleted")]
+		void MovieRecordingCompleted();
+
+		// - (void)movieRecordingFailedWithError:(NSError*)error;
+		[Export ("movieRecordingFailedWithError:")]
+		void MovieRecordingFailedWithError (NSError error);
+
+	}
+
+	[BaseType (typeof (GPUImageInput))]
+	public partial interface GPUImageMovieWriter
+	{
+		// @property(readwrite, nonatomic) BOOL hasAudioTrack;
+		[Export ("hasAudioTrack")]
+		bool HasAudioTrack { get; set; }
+
+		// @property(readwrite, nonatomic) BOOL shouldPassthroughAudio;
+		[Export ("shouldPassthroughAudio")]
+		bool ShouldPassthroughAudio { get; set; }
+
+		// @property(readwrite, nonatomic) BOOL shouldInvalidateAudioSampleWhenDone;
+		[Export ("shouldInvalidateAudioSampleWhenDone")]
+		bool ShouldInvalidateAudioSampleWhenDone { get; set; }
+
+		// @property(nonatomic, copy) void(^completionBlock)(void);
+		// @property(nonatomic, copy) void(^failureBlock)(NSError*);
+
+		// @property(nonatomic, assign) id<GPUImageMovieWriterDelegate> delegate;
+		[Export ("delegate", ArgumentSemantic.Retain)]
+		GPUImageMovieWriterDelegate Delegate { get; set; }
+
+		// @property(readwrite, nonatomic) BOOL encodingLiveVideo;
+		[Export ("encodingLiveVideo")]
+		bool EncodingLiveVideo { get; set; }
+
+		// @property(nonatomic, copy) BOOL(^videoInputReadyCallback)(void);
+		// @property(nonatomic, copy) BOOL(^audioInputReadyCallback)(void);
+
+		// @property(nonatomic) BOOL enabled;
+		[Export ("enabled")]
+		bool Enabled { get; set; }
+
+		// @property(nonatomic, readonly) AVAssetWriter *assetWriter;
+		[Export ("assetWriter")]
+		AVAssetWriter AssetWriter { get; }
+
+		// @property(nonatomic, readonly) CMTime duration;
+		[Export ("duration")]
+		CMTime Duration { get; }
+
+		// @property(nonatomic, assign) CGAffineTransform transform;
+		[Export ("transform", ArgumentSemantic.Assign)]
+		CGAffineTransform Transform { get; set; }
+
+		// @property(nonatomic, copy) NSArray *metaData;
+		[Export ("metaData", ArgumentSemantic.Copy)]
+		NSArray MetaData { get; set; }
+
+		// @property(nonatomic, assign, getter = isPaused) BOOL paused;
+		[Export ("paused", ArgumentSemantic.Assign)]
+		bool Paused { [Bind ("isPaused")] get; }
+
+		// - (id)initWithMovieURL:(NSURL *)newMovieURL size:(CGSize)newSize;
+		[Export ("initWithMovieURL:size:")]
+		IntPtr Constructor (NSUrl newMovieUrl, SizeF newSize);
+
+		// - (id)initWithMovieURL:(NSURL *)newMovieURL size:(CGSize)newSize fileType:(NSString *)newFileType outputSettings:(NSDictionary *)outputSettings;
+		[Export ("initWithMovieURL:size:fileType:outputSettings:")]
+		IntPtr Constructor (NSUrl newMovieUrl, SizeF newSize, NSString newFileType, NSDictionary outputSettings);
+
+		// - (void)setHasAudioTrack:(BOOL)hasAudioTrack audioSettings:(NSDictionary *)audioOutputSettings;
+		[Export ("setHasAudioTrack:audioSettings")]
+		void SetHasAudioTrack (bool hasAudioTrack, NSDictionary audioOutputSettings);
+
+		// - (void)startRecording;
+		[Export ("startRecording")]
+		void StartRecording();
+
+		// - (void)startRecordingInOrientation:(CGAffineTransform)orientationTransform;
+		[Export ("startRecordingInOrientation:")]
+		void startRecordingInOrientation (CGAffineTransform orientationTransform);
+
+		// - (void)finishRecording;
+		[Export ("finishRecording")]
+		void FinishRecording();
+
+		// - (void)finishRecordingWithCompletionHandler:(void (^)(void))handler;
+		[Export ("finishRecordingWithCompletionHandler:")]
+		void FinishRecordingWithCompletionHandler(NSAction completionHandler);
+
+		// - (void)cancelRecording;
+		[Export ("cancelRecording")]
+		void CancelRecording();
+
+		// - (void)processAudioBuffer:(CMSampleBufferRef)audioBuffer;
+		[Export ("processAudioBuffer:")]
+		void ProcessAudioBuffer (CMSampleBuffer audioBuffer);
+
+		// - (void)enableSynchronizationCallbacks;
+		[Export ("enableSynchronizationCallbacks")]
+		void EnableSynchronizationCallbacks();
+
+	}
+	#endregion
+
+	
 	[BaseType(typeof(NSObject))]
 	[Model]
 	public interface GPUImageTextureDelegate
